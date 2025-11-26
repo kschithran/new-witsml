@@ -10,7 +10,7 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Dot,
+  ReferenceDot,
 } from "recharts";
 
 import {
@@ -625,7 +625,7 @@ export default function DashboardPage() {
         </div>
 
         {/* RIGHT SIDE - CHARTS */}
-        <div className="xl:col-span-10 grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+        <div className="xl:col-span-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 auto-rows-[300px]">
           <ChartPanel 
             title="ROP" 
             unit="ft/hr" 
@@ -633,6 +633,15 @@ export default function DashboardPage() {
             data={displayData} 
             dataKey="rop"
             domain={[0, 1000]}
+            currentIndex={currentIndex}
+          />
+          <ChartPanel 
+            title="Weight on Bit" 
+            unit="klbs" 
+            color="#a855f7" 
+            data={displayData} 
+            dataKey="wob"
+            domain={[0, 200]}
             currentIndex={currentIndex}
           />
           <ChartPanel 
@@ -680,15 +689,7 @@ export default function DashboardPage() {
             domain={[0, 5500]}
             currentIndex={currentIndex}
           />
-          <ChartPanel 
-            title="Weight on Bit" 
-            unit="klbs" 
-            color="#a855f7" 
-            data={displayData} 
-            dataKey="wob"
-            domain={[0, 200]}
-            currentIndex={currentIndex}
-          />
+          
           <ChartPanel 
             title="Hookload" 
             unit="klbs" 
@@ -740,68 +741,38 @@ const CustomActiveDot = (props) => {
         r={10} 
         fill={stroke} 
         opacity={0.3}
-      >
-        <animate
-          attributeName="r"
-          from="6"
-          to="12"
-          dur="1s"
-          repeatCount="indefinite"
-        />
-        <animate
-          attributeName="opacity"
-          from="0.5"
-          to="0"
-          dur="1s"
-          repeatCount="indefinite"
-        />
-      </circle>
-    </g>
-  );
-};
-
-// Moving dot on the front of the line
-const MovingDot = (props) => {
-  const { cx, cy, stroke } = props;
-  return (
-    <g>
-      <circle 
-        cx={cx} 
-        cy={cy} 
-        r={4} 
-        fill={stroke} 
-        stroke="white" 
-        strokeWidth={2}
+        className="animate-ping"
       />
     </g>
   );
 };
 
 // Y-axis label with stacked format
-const YAxisLabel = ({ title, unit }) => {
+const YAxisLabel = ({ viewBox, title, unit }) => {
+  const { x, y } = viewBox;
   const lines = title.split(' ');
+  
   return (
-    <g>
-      <text
-        x={0}
-        y={0}
-        textAnchor="middle"
-        style={{
-          fontSize: '12px',
-          fill: '#94a3b8',
-          fontWeight: '600',
-        }}
-      >
-        {lines.map((line, i) => (
-          <tspan key={i} x={0} dy={i === 0 ? 0 : 14}>
-            {line}
-          </tspan>
-        ))}
-        <tspan x={0} dy={14} style={{ fontSize: '10px', fill: '#64748b' }}>
-          {unit}
+    <text
+      x={x}
+      y={y}
+      textAnchor="middle"
+      style={{
+        fontSize: '11px',
+        fill: '#94a3b8',
+        fontWeight: '600',
+      }}
+      transform={`rotate(-90, ${x}, ${y})`}
+    >
+      {lines.map((line, i) => (
+        <tspan key={i} x={x} dy={i === 0 ? 0 : 12}>
+          {line}
         </tspan>
-      </text>
-    </g>
+      ))}
+      <tspan x={x} dy={12} style={{ fontSize: '9px', fill: '#64748b' }}>
+        {unit}
+      </tspan>
+    </text>
   );
 };
 
@@ -811,25 +782,23 @@ function ChartPanel({ title, unit, color, data, dataKey, domain, currentIndex })
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-2xl p-3 sm:p-4 flex flex-col min-h-[250px] sm:min-h-[280px] shadow-xl relative"
+      className="bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-2xl p-4 flex flex-col min-h-[200px] shadow-xl relative"
     >
-      {/* Large visible title in top-right - Responsive */}
-      <div className="absolute top-2 right-2 sm:top-3 sm:right-3 md:top-4 md:right-4 text-right z-10">
-        <div className="bg-slate-800/90 backdrop-blur-sm px-2 py-1 sm:px-3 sm:py-2 rounded-lg border border-slate-700 shadow-lg">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:gap-1">
-            <span className="text-sm sm:text-base md:text-lg font-bold text-white whitespace-nowrap">
-              {title}
-            </span>
-            <span className="text-xs sm:text-sm text-slate-300">
-              ({unit})
-            </span>
-          </div>
+      {/* Large visible title in top-right */}
+      <div className="absolute top-4 right-4 text-right z-10">
+        <div className="bg-slate-800/80 backdrop-blur-sm px-3 py-2 rounded-lg border border-slate-700">
+          <span className="text-lg font-bold text-white">
+            {title}
+          </span>
+          <span className="text-sm text-slate-300 ml-1">
+            ({unit})
+          </span>
         </div>
       </div>
 
-      <div className="flex-1 mt-10 sm:mt-12 md:mt-14">
+      <div className="flex-1 mt-8">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data} margin={{ left: 10, right: 10, top: 5, bottom: 25 }}>
+          <LineChart data={data} margin={{ left: 30, right: 20, top: 10, bottom: 30 }}>
             <CartesianGrid
               strokeDasharray="3 3"
               stroke="#334155"
@@ -838,57 +807,55 @@ function ChartPanel({ title, unit, color, data, dataKey, domain, currentIndex })
             <XAxis
               dataKey="time_hms"
               stroke="#94a3b8"
-              tick={{ fontSize: 9, fill: '#94a3b8' }}
-              tickFormatter={(v) => v ? v.substring(0, 5) : ''}
+              tick={{ fontSize: 10, fill: '#94a3b8' }}
+              tickFormatter={(v) => v.substring(0, 5)}
               label={{
                 value: 'Time →',
                 position: 'insideBottom',
-                offset: -8,
-                style: { fontSize: '10px', fill: '#94a3b8', fontWeight: '600' }
+                offset: -10,
+                style: { fontSize: '11px', fill: '#94a3b8', fontWeight: '600' }
               }}
-              height={50}
             />
             <YAxis
               stroke="#94a3b8"
-              tick={{ fontSize: 9, fill: '#94a3b8' }}
+              tick={{ fontSize: 10, fill: '#94a3b8' }}
               domain={domain}
-              width={60}
-              label={{
-                value: `${title} (${unit})`,
-                angle: -90,
-                position: 'insideLeft',
-                style: { 
-                  fontSize: '10px', 
-                  fill: '#94a3b8', 
-                  fontWeight: '600',
-                  textAnchor: 'middle'
-                }
-              }}
+              label={
+                <YAxisLabel 
+                  title={title} 
+                  unit={`(${unit})`}
+                />
+              }
             />
             <Tooltip
               contentStyle={{
                 backgroundColor: "#0f172a",
                 border: `1px solid ${color}`,
                 borderRadius: 8,
-                fontSize: 10,
-                padding: '6px 10px'
+                fontSize: 11,
               }}
-              labelStyle={{ color: '#94a3b8', fontSize: 10 }}
             />
             <Line
               type="monotone"
               dataKey={dataKey}
               stroke={color}
               strokeWidth={2}
-              dot={(props) => {
-                // Show dot only on the last point (current/moving point)
-                if (props.index === data.length - 1) {
-                  return <MovingDot {...props} stroke={color} />;
-                }
-                return null;
-              }}
+              dot={false}
+              activeDot={false}
               isAnimationActive={false}
             />
+            {/* Moving dot at current position */}
+            {data.length > 0 && currentIndex >= 0 && data[currentIndex] && data[currentIndex][dataKey] && (
+              <ReferenceDot
+                x={data[currentIndex].time_hms}
+                y={parseFloat(data[currentIndex][dataKey]) || 0}
+                r={6}
+                fill={color}
+                stroke="white"
+                strokeWidth={2}
+                isFront={true}
+              />
+            )}
           </LineChart>
         </ResponsiveContainer>
       </div>
