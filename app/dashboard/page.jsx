@@ -525,7 +525,7 @@ export default function DashboardPage() {
       {/* MAIN GRID LAYOUT */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-4">
         {/* LEFT SIDEBAR - METRICS */}
-        <div className="xl:col-span-2 space-y-3">
+        <div className="xl:col-span-1 space-y-3">
           <MetricBox
             title="Hole Depth"
             value={currentData.hole_depth}
@@ -625,7 +625,7 @@ export default function DashboardPage() {
         </div>
 
         {/* RIGHT SIDE - CHARTS */}
-        <div className="xl:col-span-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 auto-rows-[300px]">
+        <div className="xl:col-span-11 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 auto-rows-[300px]">
           <ChartPanel 
             title="ROP" 
             unit="ft/hr" 
@@ -749,28 +749,23 @@ const CustomActiveDot = (props) => {
 
 // Y-axis label with stacked format
 const YAxisLabel = ({ viewBox, title, unit }) => {
-  const { x, y } = viewBox;
-  const lines = title.split(' ');
+  const { x, y, height } = viewBox;
+  const yPosition = y + height / 2;
   
   return (
     <text
-      x={x}
-      y={y}
+      x={x + 15}
+      y={yPosition}
       textAnchor="middle"
       style={{
-        fontSize: '11px',
+        fontSize: '10px',
         fill: '#94a3b8',
         fontWeight: '600',
       }}
-      transform={`rotate(-90, ${x}, ${y})`}
+      transform={`rotate(-90, ${x + 15}, ${yPosition})`}
     >
-      {lines.map((line, i) => (
-        <tspan key={i} x={x} dy={i === 0 ? 0 : 12}>
-          {line}
-        </tspan>
-      ))}
-      <tspan x={x} dy={12} style={{ fontSize: '9px', fill: '#64748b' }}>
-        {unit}
+      <tspan x={x + 15} dy={0}>
+        {title} {unit}
       </tspan>
     </text>
   );
