@@ -1,31 +1,29 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import {
-  LineChart,
+  CartesianGrid,
   Line,
+  LineChart,
+  ReferenceDot,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  ReferenceDot,
 } from "recharts";
 
 import {
-  RefreshCw,
-  Database,
-  Play,
-  Pause,
-  SkipBack,
-  SkipForward,
-  Settings,
-  X,
-  Layers,
   Activity,
   Filter,
-  Upload,
+  Layers,
+  Pause,
+  Play,
+  RefreshCw,
+  Settings,
+  SkipBack,
+  SkipForward,
+  X
 } from "lucide-react";
 
 export default function DashboardPage() {
@@ -189,48 +187,6 @@ export default function DashboardPage() {
           <p className="text-sm text-slate-500 mt-2">
             Initializing real-time simulation
           </p>
-        </motion.div>
-      </div>
-    );
-  }
-
-  /* ---------------------- NO DATA SCREEN ---------------------- */
-  if (data.length === 0) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 p-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center max-w-md"
-        >
-          <div className="bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-2xl p-8 shadow-2xl">
-            <Database className="w-16 h-16 text-amber-400 mx-auto mb-4" />
-            <h2 className="text-2xl text-slate-200 mb-3 font-light">
-              Data not exist
-            </h2>
-            <p className="text-slate-400 mb-6 text-sm leading-relaxed">
-              {error ||
-                "The database is empty or no records match your filters. Please check your filter settings or upload CSV data."}
-            </p>
-            <div className="flex flex-col gap-3">
-              {(startDate || endDate || startTime || endTime) && (
-                <button
-                  onClick={handleClearFilters}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-medium rounded-xl transition-all shadow-lg shadow-cyan-500/20"
-                >
-                  <RefreshCw className="w-4 h-4" />
-                  Clear Filters
-                </button>
-              )}
-              <a
-                href="/upload"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-medium rounded-xl transition-all shadow-lg shadow-emerald-500/20"
-              >
-                <Upload className="w-4 h-4" />
-                Upload CSV File
-              </a>
-            </div>
-          </div>
         </motion.div>
       </div>
     );
@@ -626,75 +582,75 @@ export default function DashboardPage() {
 
         {/* RIGHT SIDE - CHARTS */}
         <div className="xl:col-span-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 auto-rows-[300px]">
-          <ChartPanel 
-            title="ROP" 
-            unit="ft/hr" 
-            color="#10b981" 
-            data={displayData} 
+          <ChartPanel
+            title="ROP"
+            unit="ft/hr"
+            color="#10b981"
+            data={displayData}
             dataKey="rop"
             domain={[0, 1000]}
             currentIndex={currentIndex}
           />
-          <ChartPanel 
-            title="Weight on Bit" 
-            unit="klbs" 
-            color="#a855f7" 
-            data={displayData} 
+          <ChartPanel
+            title="Weight on Bit"
+            unit="klbs"
+            color="#a855f7"
+            data={displayData}
             dataKey="wob"
             domain={[0, 200]}
             currentIndex={currentIndex}
           />
-          <ChartPanel 
-            title="Torque" 
-            unit="klb-ft" 
-            color="#ef4444" 
-            data={displayData} 
+          <ChartPanel
+            title="Torque"
+            unit="klb-ft"
+            color="#ef4444"
+            data={displayData}
             dataKey="torque"
             domain={[0, 100]}
             currentIndex={currentIndex}
           />
-          <ChartPanel 
-            title="Rotary Speed" 
-            unit="rpm" 
-            color="#f97316" 
-            data={displayData} 
+          <ChartPanel
+            title="Rotary Speed"
+            unit="rpm"
+            color="#f97316"
+            data={displayData}
             dataKey="rotary_speed"
             domain={[0, 200]}
             currentIndex={currentIndex}
           />
-          <ChartPanel 
-            title="Flow In" 
-            unit="gpm" 
-            color="#14b8a6" 
-            data={displayData} 
+          <ChartPanel
+            title="Flow In"
+            unit="gpm"
+            color="#14b8a6"
+            data={displayData}
             dataKey="flow_in"
             domain={[0, 1200]}
             currentIndex={currentIndex}
           />
-          <ChartPanel 
-            title="Flow Out" 
-            unit="%" 
-            color="#06b6d4" 
-            data={displayData} 
+          <ChartPanel
+            title="Flow Out"
+            unit="%"
+            color="#06b6d4"
+            data={displayData}
             dataKey="flow_out"
             domain={[0, 150]}
             currentIndex={currentIndex}
           />
-          <ChartPanel 
-            title="SPP" 
-            unit="psi" 
-            color="#0ea5e9" 
-            data={displayData} 
+          <ChartPanel
+            title="SPP"
+            unit="psi"
+            color="#0ea5e9"
+            data={displayData}
             dataKey="spp"
             domain={[0, 5500]}
             currentIndex={currentIndex}
           />
-          
-          <ChartPanel 
-            title="Hookload" 
-            unit="klbs" 
-            color="#6366f1" 
-            data={displayData} 
+
+          <ChartPanel
+            title="Hookload"
+            unit="klbs"
+            color="#6366f1"
+            data={displayData}
             dataKey="hookload"
             domain={[0, 300]}
             currentIndex={currentIndex}
@@ -727,19 +683,19 @@ const CustomActiveDot = (props) => {
   const { cx, cy, stroke } = props;
   return (
     <g>
-      <circle 
-        cx={cx} 
-        cy={cy} 
-        r={6} 
-        fill={stroke} 
-        stroke="white" 
+      <circle
+        cx={cx}
+        cy={cy}
+        r={6}
+        fill={stroke}
+        stroke="white"
         strokeWidth={2}
       />
-      <circle 
-        cx={cx} 
-        cy={cy} 
-        r={10} 
-        fill={stroke} 
+      <circle
+        cx={cx}
+        cy={cy}
+        r={10}
+        fill={stroke}
         opacity={0.3}
         className="animate-ping"
       />
@@ -751,16 +707,16 @@ const CustomActiveDot = (props) => {
 const YAxisLabel = ({ viewBox, title, unit }) => {
   const { x, y, height } = viewBox;
   const yPosition = y + height / 2;
-  
+
   return (
     <text
       x={x + 15}
       y={yPosition}
       textAnchor="middle"
       style={{
-        fontSize: '10px',
-        fill: '#94a3b8',
-        fontWeight: '600',
+        fontSize: "10px",
+        fill: "#94a3b8",
+        fontWeight: "600",
       }}
       transform={`rotate(-90, ${x + 15}, ${yPosition})`}
     >
@@ -772,7 +728,15 @@ const YAxisLabel = ({ viewBox, title, unit }) => {
 };
 
 // Chart Panel Component
-function ChartPanel({ title, unit, color, data, dataKey, domain, currentIndex }) {
+function ChartPanel({
+  title,
+  unit,
+  color,
+  data,
+  dataKey,
+  domain,
+  currentIndex,
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -782,18 +746,17 @@ function ChartPanel({ title, unit, color, data, dataKey, domain, currentIndex })
       {/* Large visible title in top-right */}
       <div className="absolute top-4 right-4 text-right z-10">
         <div className="bg-slate-800/80 backdrop-blur-sm px-3 py-2 rounded-lg border border-slate-700">
-          <span className="text-lg font-bold text-white">
-            {title}
-          </span>
-          <span className="text-sm text-slate-300 ml-1">
-            ({unit})
-          </span>
+          <span className="text-lg font-bold text-white">{title}</span>
+          <span className="text-sm text-slate-300 ml-1">({unit})</span>
         </div>
       </div>
 
       <div className="flex-1 mt-8">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data} margin={{ left: 30, right: 20, top: 10, bottom: 30 }}>
+          <LineChart
+            data={data}
+            margin={{ left: 30, right: 20, top: 10, bottom: 30 }}
+          >
             <CartesianGrid
               strokeDasharray="3 3"
               stroke="#334155"
@@ -802,25 +765,20 @@ function ChartPanel({ title, unit, color, data, dataKey, domain, currentIndex })
             <XAxis
               dataKey="time_hms"
               stroke="#94a3b8"
-              tick={{ fontSize: 10, fill: '#94a3b8' }}
+              tick={{ fontSize: 10, fill: "#94a3b8" }}
               tickFormatter={(v) => v.substring(0, 5)}
               label={{
-                value: 'Time →',
-                position: 'insideBottom',
+                value: "Time →",
+                position: "insideBottom",
                 offset: -10,
-                style: { fontSize: '11px', fill: '#94a3b8', fontWeight: '600' }
+                style: { fontSize: "11px", fill: "#94a3b8", fontWeight: "600" },
               }}
             />
             <YAxis
               stroke="#94a3b8"
-              tick={{ fontSize: 10, fill: '#94a3b8' }}
+              tick={{ fontSize: 10, fill: "#94a3b8" }}
               domain={domain}
-              label={
-                <YAxisLabel 
-                  title={title} 
-                  unit={`(${unit})`}
-                />
-              }
+              label={<YAxisLabel title={title} unit={`(${unit})`} />}
             />
             <Tooltip
               contentStyle={{
@@ -840,17 +798,20 @@ function ChartPanel({ title, unit, color, data, dataKey, domain, currentIndex })
               isAnimationActive={false}
             />
             {/* Moving dot at current position */}
-            {data.length > 0 && currentIndex >= 0 && data[currentIndex] && data[currentIndex][dataKey] && (
-              <ReferenceDot
-                x={data[currentIndex].time_hms}
-                y={parseFloat(data[currentIndex][dataKey]) || 0}
-                r={6}
-                fill={color}
-                stroke="white"
-                strokeWidth={2}
-                isFront={true}
-              />
-            )}
+            {data.length > 0 &&
+              currentIndex >= 0 &&
+              data[currentIndex] &&
+              data[currentIndex][dataKey] && (
+                <ReferenceDot
+                  x={data[currentIndex].time_hms}
+                  y={parseFloat(data[currentIndex][dataKey]) || 0}
+                  r={6}
+                  fill={color}
+                  stroke="white"
+                  strokeWidth={2}
+                  isFront={true}
+                />
+              )}
           </LineChart>
         </ResponsiveContainer>
       </div>
