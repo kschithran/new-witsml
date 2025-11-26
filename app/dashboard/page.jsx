@@ -525,7 +525,7 @@ export default function DashboardPage() {
       {/* MAIN GRID LAYOUT */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-4">
         {/* LEFT SIDEBAR - METRICS */}
-        <div className="xl:col-span-1 space-y-3">
+        <div className="xl:col-span-2 space-y-3">
           <MetricBox
             title="Hole Depth"
             value={currentData.hole_depth}
@@ -625,7 +625,7 @@ export default function DashboardPage() {
         </div>
 
         {/* RIGHT SIDE - CHARTS */}
-        <div className="xl:col-span-11 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 auto-rows-[300px]">
+        <div className="xl:col-span-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 auto-rows-[300px]">
           <ChartPanel 
             title="ROP" 
             unit="ft/hr" 
