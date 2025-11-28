@@ -588,7 +588,7 @@ export default function DashboardPage() {
             color="#10b981"
             data={displayData}
             dataKey="rop"
-            domain={[0, 1000]}
+            domain={[0, 150]}
             currentIndex={currentIndex}
           />
           <ChartPanel
